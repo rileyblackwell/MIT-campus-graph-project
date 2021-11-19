@@ -78,7 +78,8 @@ def load_map(map_filename):
 # What is the objective function for this problem? What are the constraints?
 #
 # Answer:
-#
+# The objective function is to find the path with the shortest total distantce traveled from the start location (Node) to the end location (Node).
+# The constraints are the distantce traveled outdoors,
 
 # Problem 3b: Implement get_best_path
 def get_best_path(digraph, start, end, path, max_dist_outdoors, best_dist,
@@ -116,7 +117,23 @@ def get_best_path(digraph, start, end, path, max_dist_outdoors, best_dist,
         max_dist_outdoors constraints, then return None.
     """
     # TODO
-    pass
+    # TODO check [start] syntax if code isn't working
+    path = path + [start]
+    
+    try: 
+        digraph.hasnode(start) and digraph.hasnode(end)
+    except:    
+        raise 
+    
+    if start == end:
+        return path
+
+    for node in digraph.get_edges_for_node(start):
+        if node not in path:
+            if best_path == None or len(path) < len(best_path):
+                pass
+
+    
 
 
 # Problem 3c: Implement directed_dfs
