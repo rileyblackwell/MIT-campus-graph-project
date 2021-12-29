@@ -53,9 +53,17 @@ def load_map(map_filename):
             entry = entry.split(' ')
             src_node = Node(entry[0])
             dest_node = Node(entry[1])
-            g.add_node(src_node)
-            g.add_node(dest_node)
-            weighted_edge = WeightedEdge(src_node, dest_node, entry[2], entry[3][:-1])
+            try:
+                g.add_node(src_node)
+            except ValueError:
+                pass
+            try:
+                g.add_node(dest_node)
+            except ValueError:
+                pass
+            total_dist = int(entry[2])
+            outdoor_dist = int(entry[3][:-1])
+            weighted_edge = WeightedEdge(src_node, dest_node, total_dist, outdoor_dist)
             g.add_edge(weighted_edge)
     return g
 
@@ -64,11 +72,11 @@ def load_map(map_filename):
 # Include the lines used to test load_map below, but comment them out
 
 # g = load_map('test_load_map.txt')      
-# 
-# edges = g.get_edges_for_node(Node('22'))
-# 
+
+# edges = g.get_edges_for_node(Node('26'))
+
 # for edge in edges: 
-    # print(edge) 
+#     print(edge) 
 
 #
 # Problem 3: Finding the Shorest Path using Optimized Search Method
@@ -78,8 +86,9 @@ def load_map(map_filename):
 # What is the objective function for this problem? What are the constraints?
 #
 # Answer:
-# The objective function is to find the path with the shortest total distantce traveled from the start location (Node) to the end location (Node).
-# The constraints are the distantce traveled outdoors,
+# The objective function is to minimize the total distantce traveled from the start location (Node) to the end location (Node).
+# The constraints are a maximum allowed distantce traveled outdoors and a maximum allowed total distance.
+
 
 # Problem 3b: Implement get_best_path
 def get_best_path(digraph, start, end, path, max_dist_outdoors, best_dist,
@@ -116,23 +125,34 @@ def get_best_path(digraph, start, end, path, max_dist_outdoors, best_dist,
         If there exists no path that satisfies max_total_dist and
         max_dist_outdoors constraints, then return None.
     """
-    # TODO
-    # TODO check [start] syntax if code isn't working
-    path = path + [start]
     
-    try: 
-        digraph.hasnode(start) and digraph.hasnode(end)
-    except:    
-        raise 
+    path = path.copy()
+    path[0] = path[0] + [start.get_name()]
     
-    if start == end:
+    if digraph.has_node(start) == False or digraph.has_node(end) == False:
+        raise ValueError 
+    
+    if start.get_name() == end.get_name():
         return path
-
-    for node in digraph.get_edges_for_node(start):
-        if node not in path:
-            if best_path == None or len(path) < len(best_path):
-                pass
-
+    
+    for edge in digraph.get_edges_for_node(start):      
+        node = edge.get_destination() 
+        if node.get_name() not in path[0]:          
+            current_dist = path[1] + edge.get_total_distance()   
+            outdoor_dist = path[2] + edge.get_outdoor_distance()         
+            
+            if current_dist < best_dist and outdoor_dist <= max_dist_outdoors:
+                path[1] = current_dist
+                path[2] = outdoor_dist
+                new_path = get_best_path(digraph, node, end, path, max_dist_outdoors, best_dist, best_path)
+                if new_path != None:
+                    best_path = (new_path[0], new_path[1])
+                    best_dist = new_path[1] 
+                path[1] -= edge.get_total_distance()  
+                path[2] -= edge.get_outdoor_distance()  
+            
+    return best_path            
+                    
     
 
 
@@ -166,8 +186,12 @@ def directed_dfs(digraph, start, end, max_total_dist, max_dist_outdoors):
         max_dist_outdoors constraints, then raises a ValueError.
     """
     # TODO
-    pass
-
+    
+    shortest_path = get_best_path(digraph, Node(start), Node(end), [[], 0, 0], max_dist_outdoors, max_total_dist, None)
+    
+    if shortest_path == None:
+        raise ValueError
+    return shortest_path[0]
 
 # ================================================================
 # Begin tests -- you do not need to modify anything below this line
@@ -253,10 +277,16 @@ class Ps2Test(unittest.TestCase):
         self._test_impossible_path('10', '32', total_dist=100)
 
 
-# if __name__ == "__main__":
-    # unittest.main()
+if __name__ == "__main__":
+    unittest.main()
 
- 
+# def my_test():
+#     g = load_map('test_load_map.txt')     
+#     shortest_path = directed_dfs(g, '100', '14', 1000, 10)
+#     for node in shortest_path:
+#         print(node)
+
+# my_test() 
 
     
     

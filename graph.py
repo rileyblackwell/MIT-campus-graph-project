@@ -68,7 +68,7 @@ class WeightedEdge(Edge):
 
     def __str__(self):
         return f'{self.src}->{self.dest} ({self.total_distance}, {self.outdoor_distance})'
-
+         
 
 class Digraph(object):
     """Represents a directed graph of Node and Edge objects"""
@@ -83,7 +83,7 @@ class Digraph(object):
                 edge_strs.append(str(edge))
         edge_strs = sorted(edge_strs)  # sort alphabetically
         return '\n'.join(edge_strs)  # concat edge_strs with "\n"s between them
-
+       
     def get_edges_for_node(self, node):
         return self.edges[node]
 
@@ -93,22 +93,22 @@ class Digraph(object):
     def add_node(self, node):
         """Adds a Node object to the Digraph. Raises a ValueError if it is
         already in the graph."""
-        if self.has_node(node):
-            raise ValueError
-        else:
-            self.nodes.add(node)
-            self.edges[node] = []   
-
+        if self.has_node(node) == True:
+            raise ValueError('node already in graph')
+        self.nodes.add(node)
+        self.edges[node] = [] 
+         
     def add_edge(self, edge):
         """Adds an Edge or WeightedEdge instance to the Digraph. Raises a
         ValueError if either of the nodes associated with the edge is not
         in the graph."""
-        if self.has_node(edge.get_source()) and self.has_node(edge.get_destination()):
-            self.edges[edge.get_source()].append(edge)   
-        else:
-            raise ValueError
-             
-
+        src = edge.get_source()
+        dest = edge.get_destination()
+        
+        if self.has_node(src) == False or self.has_node(dest) == False:
+            raise ValueError('node not in graph')
+        self.edges[src].append(edge)   
+         
 
 # ================================================================
 # Begin tests -- you do not need to modify anything below this line
