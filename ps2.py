@@ -154,8 +154,6 @@ def get_best_path(digraph, start, end, path, max_dist_outdoors, best_dist,
     return best_path            
                     
     
-
-
 # Problem 3c: Implement directed_dfs
 def directed_dfs(digraph, start, end, max_total_dist, max_dist_outdoors):
     """
@@ -185,7 +183,6 @@ def directed_dfs(digraph, start, end, max_total_dist, max_dist_outdoors):
         If there exists no path that satisfies max_total_dist and
         max_dist_outdoors constraints, then raises a ValueError.
     """
-    # TODO
     
     shortest_path = get_best_path(digraph, Node(start), Node(end), [[], 0, 0], max_dist_outdoors, max_total_dist, None)
     
