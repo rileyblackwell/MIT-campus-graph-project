@@ -67,8 +67,8 @@ class WeightedEdge(Edge):
         return self.outdoor_distance
 
     def __str__(self):
-        return f'{self.src}->{self.dest} ({self.total_distance}, {self.outdoor_distance})'
-         
+        return '{}->{} ({}, {})'.format(self.src, self.dest, self.total_distance, self.outdoor_distance)
+     
 
 class Digraph(object):
     """Represents a directed graph of Node and Edge objects"""
@@ -165,5 +165,5 @@ class TestGraph(unittest.TestCase):
         self.assertEqual(str(self.g), expected)
 
 
-if __name__ == "__main__":
-    unittest.main()
+# if __name__ == "__main__":
+#     unittest.main()

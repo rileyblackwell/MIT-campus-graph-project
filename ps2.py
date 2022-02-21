@@ -274,16 +274,16 @@ class Ps2Test(unittest.TestCase):
         self._test_impossible_path('10', '32', total_dist=100)
 
 
-if __name__ == "__main__":
-    unittest.main()
+# if __name__ == "__main__":
+#     unittest.main()
 
-# def my_test():
-#     g = load_map('test_load_map.txt')     
-#     shortest_path = directed_dfs(g, '100', '14', 1000, 10)
-#     for node in shortest_path:
-#         print(node)
+def my_test():
+    g = load_map('test_load_map.txt')     
+    shortest_path = directed_dfs(g, '100', '14', 1000, 10)
+    for node in shortest_path:
+        print(node)
 
-# my_test() 
+my_test() 
 
     
     
